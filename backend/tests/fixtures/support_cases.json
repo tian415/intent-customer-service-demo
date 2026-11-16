@@ -1,0 +1,508 @@
+{
+  "schema_version": 1,
+  "provenance": "AI-authored engineering probes, not independent human test data",
+  "human_review": "pending",
+  "frozen_before_fixes": "2026-11-06",
+  "cases": [
+    {
+      "id": "C01",
+      "name": "退款条件不应要求先选订单",
+      "steps": [
+        "退款要满足啥条件？"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer",
+        "can_submit_refund": false
+      }
+    },
+    {
+      "id": "C02",
+      "name": "口语政策问句",
+      "steps": [
+        "不合适的话能退不？"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer"
+      }
+    },
+    {
+      "id": "C03",
+      "name": "办理请求要先选单",
+      "steps": [
+        "这个我不想要了，麻烦给我退掉"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "next_action": "ask_order"
+      }
+    },
+    {
+      "id": "C04",
+      "name": "绑定订单后明确申请",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "我要申请退款"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "can_submit_refund": true
+      }
+    },
+    {
+      "id": "C05",
+      "name": "退款进度",
+      "steps": [
+        "退款现在到哪一步了"
+      ],
+      "expect": {
+        "service_intent": "track_refund",
+        "next_action": "ask_order"
+      }
+    },
+    {
+      "id": "C06",
+      "name": "钱未回来",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "钱咋还没退回来啊"
+      ],
+      "expect": {
+        "service_intent": "track_refund",
+        "next_action": "answer",
+        "can_submit_refund": false
+      }
+    },
+    {
+      "id": "C07",
+      "name": "进度追问沿用语境",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "查一下退款进度",
+        "那什么时候能到账"
+      ],
+      "expect": {
+        "service_intent": "track_refund",
+        "next_action": "answer",
+        "can_submit_refund": false
+      }
+    },
+    {
+      "id": "C08",
+      "name": "否定退款请求",
+      "steps": [
+        "别给我退款"
+      ],
+      "expect": {
+        "service_intent": null,
+        "can_submit_refund": false,
+        "next_action": "clarify"
+      }
+    },
+    {
+      "id": "C09",
+      "name": "先别退取消当前准备",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "我要退款",
+        "先别退，我只是问问"
+      ],
+      "expect": {
+        "service_intent": null,
+        "can_submit_refund": false,
+        "next_action": "clarify"
+      }
+    },
+    {
+      "id": "C10",
+      "name": "不需要退款，只问物流",
+      "steps": [
+        "不需要退款，只想知道快递在哪"
+      ],
+      "expect": {
+        "service_intent": null,
+        "next_action": "ask_order"
+      }
+    },
+    {
+      "id": "C11",
+      "name": "否定对比保留肯定退款",
+      "steps": [
+        "不是问退款规则，我要申请退款"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "next_action": "ask_order"
+      }
+    },
+    {
+      "id": "C12",
+      "name": "改口保留最新诉求",
+      "steps": [
+        "查物流",
+        "算了，改成退款申请吧"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "next_action": "ask_order"
+      }
+    },
+    {
+      "id": "C13",
+      "name": "撤回后选单不恢复旧申请",
+      "steps": [
+        "我要退款",
+        "先不退了",
+        {
+          "action": "select_order",
+          "order_id": 3
+        }
+      ],
+      "expect": {
+        "service_intent": null,
+        "can_submit_refund": false
+      }
+    },
+    {
+      "id": "C14",
+      "name": "退款和换货需澄清",
+      "steps": [
+        "我想退货或者换货，哪个好"
+      ],
+      "expect": {
+        "service_intent": null,
+        "next_action": "clarify",
+        "can_submit_refund": false
+      }
+    },
+    {
+      "id": "C15",
+      "name": "单笔订单运输状态",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 1
+        },
+        "快递到哪了"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "reply_contains": [
+          "已发货"
+        ]
+      }
+    },
+    {
+      "id": "C16",
+      "name": "口语查物流",
+      "steps": [
+        "东西到哪儿了"
+      ],
+      "expect": {
+        "next_action": "ask_order"
+      }
+    },
+    {
+      "id": "C17",
+      "name": "无法承诺送达时间",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 1
+        },
+        "能保证明天送到吗"
+      ],
+      "expect": {
+        "next_action": [
+          "answer",
+          "handoff"
+        ],
+        "reply_not_contains": [
+          "保证明天送到",
+          "明天一定送到"
+        ]
+      }
+    },
+    {
+      "id": "C18",
+      "name": "查物流不被退款词误导",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "这单在退款，但我现在问的是快递发货了吗"
+      ],
+      "expect": {
+        "service_intent": null,
+        "next_action": "answer",
+        "reply_contains": [
+          "发货"
+        ]
+      }
+    },
+    {
+      "id": "C19",
+      "name": "账号无需订单",
+      "steps": [
+        "我忘记密码了"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "selected_order_id": null,
+        "reply_contains": [
+          "管理员"
+        ]
+      }
+    },
+    {
+      "id": "C20",
+      "name": "否定忘记密码",
+      "steps": [
+        "不是忘记密码，是一直收不到验证码"
+      ],
+      "expect": {
+        "service_intent": null,
+        "selected_order_id": null,
+        "next_action": [
+          "clarify",
+          "handoff"
+        ],
+        "reply_not_contains": [
+          "重设本系统账号密码"
+        ]
+      }
+    },
+    {
+      "id": "C21",
+      "name": "笼统登录故障先澄清",
+      "steps": [
+        "账号进不去了"
+      ],
+      "expect": {
+        "next_action": "clarify",
+        "selected_order_id": null,
+        "reply_contains": [
+          "密码"
+        ]
+      }
+    },
+    {
+      "id": "C22",
+      "name": "帐号同义写法",
+      "steps": [
+        "我的帐号登不上去了"
+      ],
+      "expect": {
+        "next_action": "clarify",
+        "selected_order_id": null
+      }
+    },
+    {
+      "id": "C23",
+      "name": "忘密口语",
+      "steps": [
+        "密码想不起来了"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "reply_contains": [
+          "管理员"
+        ]
+      }
+    },
+    {
+      "id": "C24",
+      "name": "有订单时切换账号话题",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "账号登录有问题"
+      ],
+      "expect": {
+        "next_action": "clarify",
+        "selected_order_id": null
+      }
+    },
+    {
+      "id": "C25",
+      "name": "耳机无声有一次排查",
+      "steps": [
+        "耳机左边没声"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "reply_contains": [
+          "声道"
+        ]
+      }
+    },
+    {
+      "id": "C26",
+      "name": "口语反馈排查失败",
+      "steps": [
+        "耳机左边没声",
+        "照你说的试过了，还是听不到"
+      ],
+      "expect": {
+        "next_action": "handoff",
+        "reply_not_contains": [
+          "再换一段音频"
+        ]
+      }
+    },
+    {
+      "id": "C27",
+      "name": "已恢复可结束咨询",
+      "steps": [
+        "耳机没声音",
+        "好了，现在能听到了"
+      ],
+      "expect": {
+        "status": "closed"
+      }
+    },
+    {
+      "id": "C28",
+      "name": "否定声音恢复不能关闭",
+      "steps": [
+        "耳机没声音",
+        "还没好，声音没有恢复"
+      ],
+      "expect": {
+        "next_action": "handoff",
+        "status": "active"
+      }
+    },
+    {
+      "id": "C29",
+      "name": "退款后补充原因沿用业务",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "我要退款",
+        "补充一下，是按键接触不良"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "can_submit_refund": true
+      }
+    },
+    {
+      "id": "C30",
+      "name": "退款后回复感谢不丢诉求",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "我要退款",
+        "谢谢"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "can_submit_refund": true
+      }
+    },
+    {
+      "id": "C31",
+      "name": "拒绝人工不应触发预览",
+      "steps": [
+        "我要退款",
+        "不要转人工"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "show_handoff_preview": false
+      }
+    },
+    {
+      "id": "C32",
+      "name": "明确人工保留诉求",
+      "steps": [
+        "我要退款",
+        "帮我转人工"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "show_handoff_preview": true
+      }
+    },
+    {
+      "id": "C33",
+      "name": "商品故障不捏造诊断",
+      "steps": [
+        "键盘连接电脑后一直闪灯"
+      ],
+      "expect": {
+        "next_action": [
+          "clarify",
+          "handoff"
+        ],
+        "can_submit_refund": false
+      }
+    },
+    {
+      "id": "C34",
+      "name": "业务外问题不编答复",
+      "steps": [
+        "帮我写一首关于秋天的诗"
+      ],
+      "expect": {
+        "next_action": "clarify",
+        "can_submit_refund": false
+      }
+    },
+    {
+      "id": "C35",
+      "name": "等待选单可以换到政策",
+      "steps": [
+        "我要退款",
+        "我先问一下退货规则"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer",
+        "status": "active"
+      }
+    },
+    {
+      "id": "C36",
+      "name": "不能根据历史绑定耳机误判新物流话题",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 1
+        },
+        "耳机没声音",
+        "现在帮我查下物流"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "reply_contains": [
+          "已发货"
+        ],
+        "reply_not_contains": [
+          "声道"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,1471 @@
+{
+  "schema_version": 1,
+  "kind": "self_built_chinese_scenario_coverage",
+  "frozen_at": "2026-11-16",
+  "provenance": "Self-built for graduation-project business coverage; not real customer logs; distinct from R17 engineering probes",
+  "human_review": "pending",
+  "not_to_be_merged_with": "Bitext Phase 6 accuracy / R17 engineering probe pass rate",
+  "theme_codes": [
+    "order_status",
+    "refund_policy",
+    "refund_apply",
+    "refund_status",
+    "account_access",
+    "product_help",
+    "boundary"
+  ],
+  "cases": [
+    {
+      "id": "S01",
+      "name": "查询物流需选单",
+      "theme": "order_status",
+      "steps": [
+        "我买的东西发货了没"
+      ],
+      "expect": {
+        "next_action": "ask_order"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S02",
+      "name": "选单后查物流",
+      "theme": "order_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 1
+        },
+        "帮我看看这一单物流"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "reply_contains": [
+          "已发货"
+        ]
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S03",
+      "name": "口语到哪了",
+      "theme": "order_status",
+      "steps": [
+        "包裹现在在哪里呀"
+      ],
+      "expect": {
+        "next_action": "ask_order"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S04",
+      "name": "选单后发货状态",
+      "theme": "order_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 1
+        },
+        "这单有没有发出去"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "reply_contains": [
+          "发货"
+        ]
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S05",
+      "name": "不承诺送达日",
+      "theme": "order_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 1
+        },
+        "后天一定能收到吧"
+      ],
+      "expect": {
+        "next_action": [
+          "answer",
+          "handoff"
+        ],
+        "reply_not_contains": [
+          "后天一定",
+          "保证后天"
+        ]
+      },
+      "flags": [
+        "no_delivery_promise"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S06",
+      "name": "改口到物流",
+      "theme": "order_status",
+      "steps": [
+        "我想退款",
+        "改主意了，先查物流吧"
+      ],
+      "expect": {
+        "next_action": "ask_order"
+      },
+      "flags": [
+        "topic_switch"
+      ],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S07",
+      "name": "选单后运输进度",
+      "theme": "order_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 1
+        },
+        "运输进度告诉我一下"
+      ],
+      "expect": {
+        "next_action": "answer"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S08",
+      "name": "仅问发货不问退",
+      "theme": "order_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "我现在不谈退款，只问有没有发货"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "reply_contains": [
+          "发货"
+        ],
+        "can_submit_refund": false
+      },
+      "flags": [
+        "topic_switch"
+      ],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S09",
+      "name": "查订单状态口语",
+      "theme": "order_status",
+      "steps": [
+        "订单处理到哪一步了，是发货那边"
+      ],
+      "expect": {
+        "next_action": "ask_order"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S10",
+      "name": "选单后是否在途",
+      "theme": "order_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 1
+        },
+        "还在路上吗"
+      ],
+      "expect": {
+        "next_action": "answer"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S11",
+      "name": "无实时轨迹承诺",
+      "theme": "order_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 1
+        },
+        "给我快递公司实时轨迹"
+      ],
+      "expect": {
+        "next_action": [
+          "answer",
+          "handoff"
+        ],
+        "reply_not_contains": [
+          "实时轨迹已更新到"
+        ]
+      },
+      "flags": [
+        "no_live_tracking"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S12",
+      "name": "耳机后改查物流",
+      "theme": "order_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 1
+        },
+        "左边耳机没声音",
+        "算了先看物流"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "reply_contains": [
+          "发货"
+        ],
+        "reply_not_contains": [
+          "声道"
+        ]
+      },
+      "flags": [
+        "topic_switch"
+      ],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S13",
+      "name": "退货规则",
+      "theme": "refund_policy",
+      "steps": [
+        "你们店退货规则是什么"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S14",
+      "name": "多久能退",
+      "theme": "refund_policy",
+      "steps": [
+        "买完多久以内可以申请退"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S15",
+      "name": "退款要准备啥",
+      "theme": "refund_policy",
+      "steps": [
+        "申请退款一般要准备什么材料"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S16",
+      "name": "七天能不能退",
+      "theme": "refund_policy",
+      "steps": [
+        "七天无理由这里支持吗"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S17",
+      "name": "质量问题怎么退说明",
+      "theme": "refund_policy",
+      "steps": [
+        "质量有问题的话退款流程怎么走"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S18",
+      "name": "政策不问订单",
+      "theme": "refund_policy",
+      "steps": [
+        "先别选单，我想了解退款政策"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S19",
+      "name": "从申请改口问规则",
+      "theme": "refund_policy",
+      "steps": [
+        "帮我办退款",
+        "等等，我先弄清楚退货条件"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer"
+      },
+      "flags": [
+        "topic_switch"
+      ],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S20",
+      "name": "口语能不能退",
+      "theme": "refund_policy",
+      "steps": [
+        "这商品要是不合适还能退吗"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S21",
+      "name": "退款条件清单",
+      "theme": "refund_policy",
+      "steps": [
+        "退款需要满足哪些条件"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S22",
+      "name": "如何申请说明",
+      "theme": "refund_policy",
+      "steps": [
+        "退款申请的步骤是怎样的"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S23",
+      "name": "政策答复不直接建单",
+      "theme": "refund_policy",
+      "steps": [
+        "讲一下本店退款政策"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer",
+        "can_submit_refund": false,
+        "status": "active"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S24",
+      "name": "是否支持退货咨询",
+      "theme": "refund_policy",
+      "steps": [
+        "你们支持退货吗，条件说一下"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S25",
+      "name": "明确申请需选单",
+      "theme": "refund_apply",
+      "steps": [
+        "请帮我办理退款"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "next_action": "ask_order"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S26",
+      "name": "选单后申请",
+      "theme": "refund_apply",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "请帮我提交退款申请"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "can_submit_refund": true
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S27",
+      "name": "不想要了办理",
+      "theme": "refund_apply",
+      "steps": [
+        "商品我不想保留了，申请退款"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "next_action": "ask_order"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S28",
+      "name": "选单后我要退钱",
+      "theme": "refund_apply",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "这一单我要退钱"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "can_submit_refund": true
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S29",
+      "name": "对比否定后仍申请",
+      "theme": "refund_apply",
+      "steps": [
+        "我不是咨询政策，是要正式申请退款"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "next_action": "ask_order"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S30",
+      "name": "物流改口为申请",
+      "theme": "refund_apply",
+      "steps": [
+        "查一下发货",
+        "还是直接申请退款吧"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "next_action": "ask_order"
+      },
+      "flags": [
+        "topic_switch"
+      ],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S31",
+      "name": "选单后补充原因仍可申请",
+      "theme": "refund_apply",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "申请退款",
+        "原因是尺寸不合适"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "can_submit_refund": true
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S32",
+      "name": "办理口语",
+      "theme": "refund_apply",
+      "steps": [
+        "麻烦退掉这一单吧"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "next_action": "ask_order"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S33",
+      "name": "选单后要求办理",
+      "theme": "refund_apply",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "现在就办理退款"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "can_submit_refund": true
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S34",
+      "name": "感谢不丢申请",
+      "theme": "refund_apply",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "请替我提交退款",
+        "好的谢谢"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "can_submit_refund": true
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S35",
+      "name": "申请不自动建单",
+      "theme": "refund_apply",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "我想申请退款"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "can_submit_refund": true,
+        "status": "active"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S36",
+      "name": "要求退货办理",
+      "theme": "refund_apply",
+      "steps": [
+        "帮我走退货退款流程"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "next_action": "ask_order"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S37",
+      "name": "查退款进度需单",
+      "theme": "refund_status",
+      "steps": [
+        "上次退款处理到哪了"
+      ],
+      "expect": {
+        "service_intent": "track_refund",
+        "next_action": "ask_order"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S38",
+      "name": "选单后退款进度",
+      "theme": "refund_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "退款审核结果出来没"
+      ],
+      "expect": {
+        "service_intent": "track_refund",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S39",
+      "name": "钱到账追问",
+      "theme": "refund_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "退款进度如何",
+        "大概几天能到账"
+      ],
+      "expect": {
+        "service_intent": "track_refund",
+        "next_action": "answer",
+        "can_submit_refund": false,
+        "reply_not_contains": [
+          "已打入银行卡",
+          "明天到账"
+        ]
+      },
+      "flags": [
+        "no_bank_promise"
+      ],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S40",
+      "name": "还没退回来",
+      "theme": "refund_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "怎么还没退回来"
+      ],
+      "expect": {
+        "service_intent": "track_refund",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S41",
+      "name": "申请后的状态",
+      "theme": "refund_status",
+      "steps": [
+        "我申请过的退款现在什么状态"
+      ],
+      "expect": {
+        "service_intent": "track_refund",
+        "next_action": "ask_order"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S42",
+      "name": "进度口语",
+      "theme": "refund_status",
+      "steps": [
+        "退费进度麻烦查一下"
+      ],
+      "expect": {
+        "service_intent": "track_refund",
+        "next_action": "ask_order"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S43",
+      "name": "选单后何时退回",
+      "theme": "refund_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "退款什么时候退回"
+      ],
+      "expect": {
+        "service_intent": "track_refund",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S44",
+      "name": "结果查询",
+      "theme": "refund_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "客服审核退款的结果呢"
+      ],
+      "expect": {
+        "service_intent": "track_refund",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S45",
+      "name": "进度不误变申请",
+      "theme": "refund_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "查退款进度"
+      ],
+      "expect": {
+        "service_intent": "track_refund",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S46",
+      "name": "之前那笔退款",
+      "theme": "refund_status",
+      "steps": [
+        "之前那笔退款现在怎样了"
+      ],
+      "expect": {
+        "service_intent": "track_refund",
+        "next_action": "ask_order"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S47",
+      "name": "到账省略追问",
+      "theme": "refund_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "退款进度",
+        "到账了吗"
+      ],
+      "expect": {
+        "service_intent": "track_refund",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S48",
+      "name": "不编造银行凭证",
+      "theme": "refund_status",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "退款有没有打到我卡上"
+      ],
+      "expect": {
+        "service_intent": "track_refund",
+        "next_action": "answer",
+        "reply_not_contains": [
+          "已成功到账",
+          "银行回单号"
+        ]
+      },
+      "flags": [
+        "no_bank_promise"
+      ],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S49",
+      "name": "忘记密码",
+      "theme": "account_access",
+      "steps": [
+        "登录密码忘记了怎么办"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "selected_order_id": null,
+        "reply_contains": [
+          "管理员"
+        ]
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S50",
+      "name": "想不起密码",
+      "theme": "account_access",
+      "steps": [
+        "密码完全想不起来"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "selected_order_id": null,
+        "reply_contains": [
+          "管理员"
+        ]
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S51",
+      "name": "笼统登不进",
+      "theme": "account_access",
+      "steps": [
+        "我登不进账号了"
+      ],
+      "expect": {
+        "next_action": "clarify",
+        "selected_order_id": null
+      },
+      "flags": [],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S52",
+      "name": "账号异常",
+      "theme": "account_access",
+      "steps": [
+        "账号好像出问题了进不去"
+      ],
+      "expect": {
+        "next_action": "clarify",
+        "selected_order_id": null
+      },
+      "flags": [],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S53",
+      "name": "验证码收不到",
+      "theme": "account_access",
+      "steps": [
+        "我不是忘密码，验证码一直收不到"
+      ],
+      "expect": {
+        "next_action": [
+          "clarify",
+          "handoff"
+        ],
+        "selected_order_id": null,
+        "reply_not_contains": [
+          "重设本系统账号密码"
+        ]
+      },
+      "flags": [
+        "clarify"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S54",
+      "name": "有订单时切账号",
+      "theme": "account_access",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "现在是账号登录的问题"
+      ],
+      "expect": {
+        "next_action": "clarify",
+        "selected_order_id": null
+      },
+      "flags": [
+        "topic_switch"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S55",
+      "name": "密码重置指引",
+      "theme": "account_access",
+      "steps": [
+        "怎么重置这个系统的密码"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "reply_contains": [
+          "管理员"
+        ]
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S56",
+      "name": "帐号同义",
+      "theme": "account_access",
+      "steps": [
+        "我的帐号突然登不上"
+      ],
+      "expect": {
+        "next_action": "clarify",
+        "selected_order_id": null
+      },
+      "flags": [],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S57",
+      "name": "登录失败澄清",
+      "theme": "account_access",
+      "steps": [
+        "登录一直失败"
+      ],
+      "expect": {
+        "next_action": "clarify",
+        "selected_order_id": null
+      },
+      "flags": [],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S58",
+      "name": "不索要密码",
+      "theme": "account_access",
+      "steps": [
+        "密码忘了"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "reply_not_contains": [
+          "请把密码发给我",
+          "把验证码发过来"
+        ]
+      },
+      "flags": [
+        "privacy"
+      ],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S59",
+      "name": "账号被锁口语",
+      "theme": "account_access",
+      "steps": [
+        "感觉账号被锁了进不去"
+      ],
+      "expect": {
+        "next_action": [
+          "clarify",
+          "handoff"
+        ],
+        "selected_order_id": null
+      },
+      "flags": [],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S60",
+      "name": "找回密码说法",
+      "theme": "account_access",
+      "steps": [
+        "想找回登录密码"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "reply_contains": [
+          "管理员"
+        ]
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S61",
+      "name": "耳机左侧无声",
+      "theme": "product_help",
+      "steps": [
+        "无线耳机左侧没有声音"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "reply_contains": [
+          "声道"
+        ]
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S62",
+      "name": "耳机一边没声",
+      "theme": "product_help",
+      "steps": [
+        "耳机有一边完全没声"
+      ],
+      "expect": {
+        "next_action": "answer",
+        "reply_contains": [
+          "声道"
+        ]
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S63",
+      "name": "排查后仍无声",
+      "theme": "product_help",
+      "steps": [
+        "耳机左边没声音",
+        "按你说的做了还是不行"
+      ],
+      "expect": {
+        "next_action": "handoff",
+        "reply_not_contains": [
+          "再换一段音频"
+        ]
+      },
+      "flags": [
+        "handoff"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S64",
+      "name": "恢复后结束",
+      "theme": "product_help",
+      "steps": [
+        "这副耳机完全没声",
+        "已经好了能听见了"
+      ],
+      "expect": {
+        "status": "closed"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S65",
+      "name": "未恢复保持处理",
+      "theme": "product_help",
+      "steps": [
+        "这副耳机完全没声",
+        "还是不行，没有恢复"
+      ],
+      "expect": {
+        "next_action": "handoff",
+        "status": "active"
+      },
+      "flags": [],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S66",
+      "name": "键盘故障不编诊断",
+      "theme": "product_help",
+      "steps": [
+        "机械键盘插上后灯乱闪"
+      ],
+      "expect": {
+        "next_action": [
+          "clarify",
+          "handoff"
+        ],
+        "can_submit_refund": false,
+        "reply_not_contains": [
+          "主板短路已确认"
+        ]
+      },
+      "flags": [
+        "out_of_self_service"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S67",
+      "name": "保温杯问题转人工倾向",
+      "theme": "product_help",
+      "steps": [
+        "保温杯盖子拧不紧漏水"
+      ],
+      "expect": {
+        "next_action": [
+          "clarify",
+          "handoff"
+        ],
+        "can_submit_refund": false
+      },
+      "flags": [
+        "out_of_self_service"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S68",
+      "name": "耳机右侧重述",
+      "theme": "product_help",
+      "steps": [
+        "右边耳机听不见声音"
+      ],
+      "expect": {
+        "next_action": [
+          "answer",
+          "clarify",
+          "handoff"
+        ]
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S69",
+      "name": "排查中途转人工",
+      "theme": "product_help",
+      "steps": [
+        "耳机左边没声音",
+        "直接帮我转人工吧"
+      ],
+      "expect": {
+        "show_handoff_preview": true
+      },
+      "flags": [
+        "handoff"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S70",
+      "name": "商品使用询问",
+      "theme": "product_help",
+      "steps": [
+        "这个耳机怎么配对"
+      ],
+      "expect": {
+        "next_action": [
+          "clarify",
+          "answer",
+          "handoff"
+        ],
+        "can_submit_refund": false
+      },
+      "flags": [],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S71",
+      "name": "排查后口语还是听不见",
+      "theme": "product_help",
+      "steps": [
+        "耳机左侧没声",
+        "试过了依旧听不见"
+      ],
+      "expect": {
+        "next_action": "handoff"
+      },
+      "flags": [],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S72",
+      "name": "明确恢复结束",
+      "theme": "product_help",
+      "steps": [
+        "这副耳机完全没声",
+        "好了好了，恢复了"
+      ],
+      "expect": {
+        "status": "closed"
+      },
+      "flags": [],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S73",
+      "name": "明确不要退款",
+      "theme": "boundary",
+      "steps": [
+        "不要给我退款"
+      ],
+      "expect": {
+        "service_intent": null,
+        "can_submit_refund": false,
+        "next_action": "clarify"
+      },
+      "flags": [
+        "negation"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S74",
+      "name": "取消正在准备的退款",
+      "theme": "boundary",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "帮我退款",
+        "先停一下，不退了"
+      ],
+      "expect": {
+        "service_intent": null,
+        "can_submit_refund": false,
+        "next_action": "clarify"
+      },
+      "flags": [
+        "negation"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S75",
+      "name": "退换二选一澄清",
+      "theme": "boundary",
+      "steps": [
+        "退款和换货我还没想好选哪个"
+      ],
+      "expect": {
+        "service_intent": null,
+        "next_action": "clarify",
+        "can_submit_refund": false
+      },
+      "flags": [
+        "multi_intent"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S76",
+      "name": "只要物流不要退",
+      "theme": "boundary",
+      "steps": [
+        "我不退了，只想知道快递位置"
+      ],
+      "expect": {
+        "next_action": "ask_order",
+        "can_submit_refund": false
+      },
+      "flags": [
+        "negation",
+        "topic_switch"
+      ],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S77",
+      "name": "撤回后选单不恢复申请",
+      "theme": "boundary",
+      "steps": [
+        "我想退款",
+        "不退了",
+        {
+          "action": "select_order",
+          "order_id": 3
+        }
+      ],
+      "expect": {
+        "service_intent": null,
+        "can_submit_refund": false
+      },
+      "flags": [
+        "negation"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S78",
+      "name": "拒绝转人工",
+      "theme": "boundary",
+      "steps": [
+        "帮我办理退款申请",
+        "先别转人工"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "show_handoff_preview": false
+      },
+      "flags": [
+        "negation"
+      ],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S79",
+      "name": "明确转人工保留诉求",
+      "theme": "boundary",
+      "steps": [
+        "请帮我申请退款",
+        "转人工处理"
+      ],
+      "expect": {
+        "service_intent": "get_refund",
+        "show_handoff_preview": true
+      },
+      "flags": [
+        "handoff"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S80",
+      "name": "业务外请求",
+      "theme": "boundary",
+      "steps": [
+        "帮我写一首春天的诗"
+      ],
+      "expect": {
+        "next_action": "clarify",
+        "can_submit_refund": false
+      },
+      "flags": [
+        "out_of_scope"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S81",
+      "name": "闲聊不办退",
+      "theme": "boundary",
+      "steps": [
+        "今天天气真好"
+      ],
+      "expect": {
+        "next_action": "clarify",
+        "can_submit_refund": false
+      },
+      "flags": [
+        "out_of_scope"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S82",
+      "name": "换货还是退货",
+      "theme": "boundary",
+      "steps": [
+        "到底是换货好还是退货好"
+      ],
+      "expect": {
+        "service_intent": null,
+        "next_action": "clarify",
+        "can_submit_refund": false
+      },
+      "flags": [
+        "multi_intent"
+      ],
+      "self_service_eligible": false
+    },
+    {
+      "id": "S83",
+      "name": "否定后问政策",
+      "theme": "boundary",
+      "steps": [
+        "别急着退，先告诉我退款规则"
+      ],
+      "expect": {
+        "service_intent": "check_refund_policy",
+        "next_action": "answer",
+        "can_submit_refund": false
+      },
+      "flags": [
+        "negation",
+        "topic_switch"
+      ],
+      "self_service_eligible": true
+    },
+    {
+      "id": "S84",
+      "name": "进度中切耳机",
+      "theme": "boundary",
+      "steps": [
+        {
+          "action": "select_order",
+          "order_id": 3
+        },
+        "退款进度怎么样",
+        "对了耳机左边没声"
+      ],
+      "expect": {
+        "next_action": [
+          "answer",
+          "handoff"
+        ],
+        "reply_contains": [
+          "声道"
+        ],
+        "can_submit_refund": false
+      },
+      "flags": [
+        "topic_switch"
+      ],
+      "self_service_eligible": true
+    }
+  ]
+}

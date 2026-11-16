@@ -1,0 +1,15 @@
+CREATE TABLE groups (id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE);
+CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT NOT NULL UNIQUE, display_name TEXT NOT NULL, password_hash TEXT NOT NULL, role TEXT NOT NULL CHECK(role IN ('user','agent','admin')), active BOOLEAN NOT NULL DEFAULT 1, group_id INTEGER REFERENCES groups(id), created_at TEXT NOT NULL);
+CREATE TABLE sessions (id TEXT PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id), csrf_token TEXT NOT NULL, expires_at INTEGER NOT NULL);
+CREATE INDEX ix_sessions_user ON sessions(user_id);
+CREATE TABLE login_attempts (key TEXT PRIMARY KEY, count INTEGER NOT NULL, until_at INTEGER NOT NULL);
+CREATE TABLE categories (id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE, keywords TEXT NOT NULL DEFAULT '', active BOOLEAN NOT NULL DEFAULT 1, group_id INTEGER REFERENCES groups(id));
+CREATE TABLE faqs (id INTEGER PRIMARY KEY, question TEXT NOT NULL, answer TEXT NOT NULL, keywords TEXT NOT NULL DEFAULT '', category_id INTEGER REFERENCES categories(id), active BOOLEAN NOT NULL DEFAULT 1);
+CREATE TABLE tickets (id INTEGER PRIMARY KEY, title TEXT NOT NULL, description TEXT NOT NULL, owner_id INTEGER NOT NULL REFERENCES users(id), assignee_id INTEGER REFERENCES users(id), category_id INTEGER REFERENCES categories(id), group_id INTEGER REFERENCES groups(id), status TEXT NOT NULL CHECK(status IN ('pending','assigned','processing','resolved','closed')), version INTEGER NOT NULL DEFAULT 1, prediction_source TEXT NOT NULL, prediction_score REAL NOT NULL DEFAULT 0, needs_manual BOOLEAN NOT NULL DEFAULT 1, created_at TEXT NOT NULL, updated_at TEXT NOT NULL);
+CREATE INDEX ix_tickets_owner ON tickets(owner_id);
+CREATE INDEX ix_tickets_assignee_status ON tickets(assignee_id,status);
+CREATE INDEX ix_tickets_group_status ON tickets(group_id,status);
+CREATE TABLE messages (id INTEGER PRIMARY KEY, ticket_id INTEGER NOT NULL REFERENCES tickets(id), author_id INTEGER NOT NULL REFERENCES users(id), body TEXT NOT NULL, internal BOOLEAN NOT NULL DEFAULT 0, created_at TEXT NOT NULL);
+CREATE INDEX ix_messages_ticket ON messages(ticket_id);
+CREATE TABLE ticket_events (id INTEGER PRIMARY KEY, ticket_id INTEGER NOT NULL REFERENCES tickets(id), actor_id INTEGER NOT NULL REFERENCES users(id), kind TEXT NOT NULL, detail TEXT NOT NULL, created_at TEXT NOT NULL);
+CREATE INDEX ix_events_ticket ON ticket_events(ticket_id);

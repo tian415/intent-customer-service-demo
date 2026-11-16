@@ -1,0 +1,85 @@
+# Secrets and local configuration (only sanitized examples may be tracked)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+secrets*.json
+
+# Python environments, bytecode and test/build output
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage*
+htmlcov/
+*.egg-info/
+build/
+dist/
+
+# Frontend dependencies and generated output
+node_modules/
+.vite/
+coverage/
+*.tsbuildinfo
+
+# Runtime databases, private/raw datasets and model artifacts
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+data/raw/
+data/private/
+data/processed/
+data/runtime/
+ml/artifacts/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.h5
+*.hdf5
+*.gguf
+*.bin
+*.pkl
+*.pickle
+*.joblib
+
+# Local caches, editor state and temporary files
+.cache/
+.DS_Store
+.idea/
+.vscode/
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+tmp/
+temp/
+
+# Large local demo videos stay on disk; keep screenshots and README indexes tracked
+*.mp4
+*.mov
+*.webm
+
+# Keep private materials and local archives out of the software repository.
+文档交付/
+*任务书*
+*开题报告*
+*.docx
+*.doc
+*.pdf
+*.zip
+*.tar.gz
+accounts.json
